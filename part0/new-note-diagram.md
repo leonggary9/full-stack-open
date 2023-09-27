@@ -1,10 +1,12 @@
+```mermaid
+
 sequenceDiagram
     participant browser
     participant server
 
     browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note { "note": "some note" }
     activate server
-    server-->>browser: Status Code 302, Location: /notes
+    server-->>browser: HTTP Status Code 302, Location: /notes
     deactivate server
 
     Note right of browser: browser reloads the Notes page
