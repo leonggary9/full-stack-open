@@ -1,0 +1,57 @@
+GET http://localhost:3001/info
+
+###
+GET http://localhost:3001/api/persons
+
+###
+GET http://localhost:3001/api/persons/1
+
+###
+GET http://localhost:3001/api/persons/10
+
+###
+GET http://localhost:3001/api/persons/651d7c90e4850265874beb18
+
+###
+GET http://localhost:3001/api/persons/651d7c90e4850265874beb17
+
+###
+DELETE http://localhost:3001/api/persons/5
+
+###
+DELETE http://localhost:3001/api/persons/651e2e0e16f9a42ba744345a
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "gg"
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "number": 9999
+}
+
+###
+POST http://localhost:3001/api/persons
+Content-Type: application/json
+
+{
+    "name": "Mary Poppendieck", 
+    "number": "12345"
+}
+
+###
+PUT http://localhost:3001/api/persons/651d847806e4f3d6ab2d1423
+Content-Type: application/json
+
+{
+    "name": "Mary Poppendieck", 
+    "number": "123-45666"
+}
+
