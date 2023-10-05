@@ -1,0 +1,29 @@
+{
+  "name": "1-bloglist-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lintfix": "eslint . --fix",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:ui": "rm -rf dist && cd ../1-phonebook-frontend/ && npm run build && cp -r dist ../1-phonebook-backend",
+    "deploy": "fly deploy",
+    "deploy:full": "npm run build:ui && npm run deploy",
+    "logs:prod": "fly logs"
+  },
+  "author": "Gary Leong",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "mongoose": "^7.5.4",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.50.0",
+    "nodemon": "^3.0.1"
+  }
+}
