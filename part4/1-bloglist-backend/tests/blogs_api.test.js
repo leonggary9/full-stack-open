@@ -1,13 +1,30 @@
+const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 beforeEach(async () => {
+  await User.deleteMany({})
+  const passwordHash = await bcrypt.hash('password', 10)
+  const newUser = new User({
+    username: 'testUsername',
+    name: 'testName',
+    passwordHash: passwordHash
+  })
+  const savedUser = await newUser.save()
+  // console.log(savedUser)
+  const updatedBlogs = helper.initialBlogs.map(b => ({
+    ...b,
+    user: savedUser._id
+  }))
   await Blog.deleteMany({})
-  await Blog.insertMany(helper.initialBlogs)
+  // console.log(updatedBlogs)
+  await Blog.insertMany(updatedBlogs)
 }, 100000)
 
 describe('when trying to get all blog posts', () => {
@@ -35,13 +52,20 @@ describe('when adding a new blog post', () => {
   test('a valid blog post can be added', async() => {
     const newBlogPost = {
       title: 'new_title',
-      author: 'some_author',
       url: 'some_url',
       likes: 1
     }
 
+    const user = await User.findOne({ username: 'testUsername' })
+
+    const token = jwt.sign({
+      username: user.username,
+      id: user._id,
+    }, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogPost)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -51,7 +75,6 @@ describe('when adding a new blog post', () => {
 
     const targetBlogPost = allBlogsInDB.find(b => {
       return b.title === newBlogPost.title &&
-      b.author === newBlogPost.author &&
       b.url === newBlogPost.url &&
       b.likes === newBlogPost.likes
     })
@@ -65,8 +88,16 @@ describe('when adding a new blog post', () => {
       url: 'some_url'
     }
 
+    const user = await User.findOne({ username: 'testUsername' })
+
+    const token = jwt.sign({
+      username: user.username,
+      id: user._id,
+    }, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(newBlogPost)
       .expect(201)
       .expect('Content-Type', /application\/json/)
@@ -84,8 +115,16 @@ describe('when adding a new blog post', () => {
       likes: 1
     }
 
+    const user = await User.findOne({ username: 'testUsername' })
+
+    const token = jwt.sign({
+      username: user.username,
+      id: user._id,
+    }, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogPostWithoutTitle)
       .expect(400)
   }, 100000)
@@ -97,10 +136,19 @@ describe('when adding a new blog post', () => {
       likes: 1
     }
 
+    const user = await User.findOne({ username: 'testUsername' })
+
+    const token = jwt.sign({
+      username: user.username,
+      id: user._id,
+    }, process.env.SECRET)
+
     await api
       .post('/api/blogs')
+      .set('Authorization', `Bearer ${token}`)
       .send(blogPostWithoutUrl)
       .expect(400)
+
   }, 100000)
 })
 
@@ -108,8 +156,17 @@ describe('when deleting a blog post', () => {
   test('204 is returned and note is deleted', async() => {
     const blogsAtStart = await helper.blogsInDB()
     const idToDelete = blogsAtStart[Math.floor(Math.random() * blogsAtStart.length)].id
+
+    const user = await User.findOne({ username: 'testUsername' })
+
+    const token = jwt.sign({
+      username: user.username,
+      id: user._id,
+    }, process.env.SECRET)
+
     await api
       .delete(`/api/blogs/${idToDelete}`)
+      .set('Authorization', `Bearer ${token}`)
       .expect(204)
 
     const blogsAtEnd = await helper.blogsInDB()
