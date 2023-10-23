@@ -108,18 +108,18 @@ const App = () => {
         <h2>Log in to application</h2>
         <ErrorNotification message={errorMessage} />
         <SuccessNotification message={successMessage} />
-        <form onSubmit={handleLogin}>
+        <form id='login-form' onSubmit={handleLogin}>
           <div>
             username
-            <input type="text" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}
+            <input type="text" id="username" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}
             />
           </div>
           <div>
             password
-            <input type="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}
+            <input type="password" id="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}
             />
           </div>
-          <button type="submit">login</button>
+          <button type="submit" id="login-button">login</button>
         </form>
       </div>
     )
@@ -131,7 +131,7 @@ const App = () => {
       <ErrorNotification message={errorMessage} />
       <SuccessNotification message={successMessage} />
       {
-        <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
+        <p>{user.name} is logged in <button id='logout-button' onClick={handleLogout}>logout</button></p>
       }
 
       <h2>create new</h2>

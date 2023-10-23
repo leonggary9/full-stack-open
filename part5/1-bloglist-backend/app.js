@@ -9,6 +9,7 @@ const middleware = require('./utils/middleware')
 const blogRouter = require('./controller/blogs')
 const userRouter = require('./controller/users')
 const loginRouter = require('./controller/login')
+const testingRouter = require('./controller/testing')
 
 const app = express()
 
@@ -27,6 +28,10 @@ app.use(express.json())
 // app.use(middleware.requestLogger)
 app.use(middleware.morganLogger)
 app.use(middleware.tokenExtractor)
+
+if (process.env.NODE_ENV === 'test') {
+  app.use('/api/testing', testingRouter)
+}
 
 app.use('/api/blogs', middleware.userExtractor, blogRouter)
 app.use('/api/users', userRouter)

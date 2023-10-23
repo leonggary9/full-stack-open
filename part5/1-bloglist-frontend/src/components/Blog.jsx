@@ -28,13 +28,13 @@ const Blog = ({ blog, username, updateBlog, deleteBlog }) => {
       <div className='url'>{blog.url}</div>
       <div className='likes'>likes {blog.likes}<button className='likeButton' onClick={() => addLike(blog)}>like</button></div>
       <div className='username'>{blog.user.name}</div>
-      { username === blog.user.username ? <button onClick={() => deleteBlog(blog)}>delete</button> : '' }
+      { username === blog.user.username ? <button className='deleteButton' onClick={() => deleteBlog(blog)}>delete</button> : '' }
     </div>
   )
 
   return (
     <>
-      <div style={blogStyle}>
+      <div className='blog' style={blogStyle}>
         <div className='titleAuthor'>{blog.title} - {blog.author}</div>
         <button className='showDetailsButton' onClick={() => setShowDetails(!showDetails)}>{showDetails ? 'hide' : 'view'}</button>
         { showDetails ? details : ''}
