@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { voteFor } from '../reducers/anecdoteReducer'
+import { vote } from '../reducers/anecdoteReducer'
+import { setNotification } from '../reducers/notificationReducer'
 
 const Anecdote = ({anecdote, handleVote}) => {
   return (
@@ -13,18 +14,32 @@ const Anecdote = ({anecdote, handleVote}) => {
   )
 }
 
+
+
 const AnecdoteList = () => {
-  const anecdotes = useSelector(state => state)
-  anecdotes.sort((a, b) => b.votes - a.votes)
+  let anecdotes = useSelector(({filter, anecdotes}) => {
+    if (filter.length === 0) {
+      return anecdotes
+    } else {
+      return anecdotes.filter(anecdote => anecdote.content.includes(filter))
+    }
+  })
+  // Because the array is frozen in strict mode, you'll need to copy the array before sorting it
+  anecdotes = anecdotes.slice().sort((a, b) => b.votes - a.votes)
 
   const dispatch = useDispatch()
+
+  const handleVote = (anecdote) => {
+    dispatch(vote(anecdote))
+    dispatch(setNotification(`you voted for '${anecdote.content}'`, 5000))
+  }
 
   return (
     anecdotes.map(anecdote =>
       <Anecdote 
         key={anecdote.id} 
         anecdote={anecdote}
-        handleVote={() => dispatch(voteFor(anecdote.id))}
+        handleVote={() => handleVote(anecdote)}
       />
     )
   )
