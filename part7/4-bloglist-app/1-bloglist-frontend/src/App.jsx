@@ -13,14 +13,14 @@ import { useUserDispatch, useUserValue } from './UserContext'
 import Users from './components/Users'
 import User from './components/User'
 import Blog from './components/Blog'
+import { Button, TextField } from '@mui/material'
 
 const App = () => {
   const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-
-  const blogFormRef = useRef()
 
   const notificationDispatch = useNotificationDispatch()
   const setErrorNotification = (payload) => {
@@ -63,6 +63,7 @@ const App = () => {
       blogService.setToken(user.token)
       setUsername('')
       setPassword('')
+      navigate('/')
     } catch(exception) {
       setErrorNotification('wrong username or password')
     }
@@ -113,17 +114,11 @@ const App = () => {
         <h2>Log in to application</h2>
         <Notification />
         <form id='login-form' onSubmit={handleLogin}>
+          <TextField label='username' type="text" id="username" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}/>
+          <TextField label='password' type="password" id="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}/>
           <div>
-            username
-            <input type="text" id="username" value={username} name="Username" onChange={({ target }) => setUsername(target.value)}
-            />
+            <Button type="submit" id="login-button" variant='contained'>login</Button>
           </div>
-          <div>
-            password
-            <input type="password" id="password" value={password} name="Password" onChange={({ target }) => setPassword(target.value)}
-            />
-          </div>
-          <button type="submit" id="login-button">login</button>
         </form>
       </div>
     )

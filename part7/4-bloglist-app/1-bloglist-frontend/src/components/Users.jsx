@@ -1,6 +1,16 @@
 import {
   Link
 } from 'react-router-dom'
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+  TableHead,
+} from '@mui/material'
 
 const Users = ({ users }) => {
 
@@ -9,24 +19,26 @@ const Users = ({ users }) => {
   return (
     <div>
       <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th></th>
-            <th>blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
-          {
-            users.map(u =>
-              <tr key={u.name}>
-                <td><Link to={`/users/${u.id}`}>{u.name}</Link></td>
-                <td>{u.blogs.length}</td>
-              </tr>
-            )
-          }
-        </tbody>
-      </table>
+      <TableContainer component={Paper}>
+        <Table>
+          <TableHead>
+            <TableCell></TableCell>
+            <TableCell>blogs created</TableCell>
+          </TableHead>
+          <TableBody>
+            {users.map(u => (
+              <TableRow key={u.id}>
+                <TableCell>
+                  <Link to={`/users/${u.id}`}>{u.name}</Link>
+                </TableCell>
+                <TableCell>
+                  {u.blogs.length}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </div>
 
   )
